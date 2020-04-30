@@ -1,0 +1,23 @@
+{
+  "http": {
+    "enabled": true,
+    "port": "8087",
+    "timeout": {
+      "read": 30,
+      "write": 30
+    }
+  },
+  "https": {
+    "enabled": true,
+    "port": "8089",
+    "timeout": {
+      "read": 30,
+      "write": 30
+    }
+  },
+  "certificate": {
+    "path": "cert",
+    "cert": "cert.pem",
+    "key": "key.pem"
+  }
+}
