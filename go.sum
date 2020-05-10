@@ -1,4 +1,6 @@
 github.com/egovorukhin/egoconfigurator v0.1.6 h1:28e5M64VX4UxGYp8HlZBCilkE4LPI4Um4w7A8ZIXtMc=
 github.com/egovorukhin/egoconfigurator v0.1.6/go.mod h1:gKPEdbF2QAvH55n8rZSOT0/tvwcf10/P+yveUyjUOYs=
+github.com/egovorukhin/egologger v0.2.6 h1:qAV7sKUc3pHuBpGQ9y8fMBQKAJ1AJm0QdENYZ14gmOg=
+github.com/egovorukhin/egologger v0.2.6/go.mod h1:RDU76rS2oKOoe3GsAlUctcwlUmh80FtKPAt00A31psM=
 github.com/gorilla/mux v1.7.4 h1:VuZ8uybHlWmqV03+zRzdwKL4tUnIp1MAQtp1mIFE1bc=
 github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=

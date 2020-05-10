@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"github.com/egovorukhin/egologger/logger"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path/filepath"
@@ -40,20 +41,19 @@ func (h *Https) Init() error {
 		return err
 	}
 
-	var errCh chan error
-	go h.ListenAsync(errCh)
+	//В горутине запускаем слушатель
+	go h.ListenAsync()
 
 	h.Started = true
 
 	return nil
 }
 
-func (h Https) ListenAsync(errCh chan error) {
+func (h Https) ListenAsync() {
 	cert := filepath.Join(ws.Certificate.Path, ws.Certificate.Cert)
 	key := filepath.Join(ws.Certificate.Path, ws.Certificate.Key)
 	if err := h.Server.ListenAndServeTLS(cert, key); err != http.ErrServerClosed {
-		errCh <- err
-		//logger.TraceFileName(h, h.Init, err, "webserver")
+		logger.TraceFileName(h, h.ListenAsync, err, "webserver")
 	}
 }
 

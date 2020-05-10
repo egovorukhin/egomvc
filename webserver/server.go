@@ -3,6 +3,7 @@ package webserver
 import (
 	"fmt"
 	"github.com/egovorukhin/egoconfigurator/config"
+	"github.com/egovorukhin/egologger/logger"
 	"net/http"
 	"os"
 	"path"
@@ -40,6 +41,7 @@ func (ws *WebServer) start() string {
 	//Загружаем конфигурацию
 	err := ws.load()
 	if err != nil {
+		logger.TraceFileName(ws, ws.start, err, "webserver")
 		return err.Error()
 	}
 
@@ -48,6 +50,7 @@ func (ws *WebServer) start() string {
 	if ws.Https.Enabled {
 		err = ws.Https.Init()
 		if err != nil {
+			logger.TraceFileName(ws, ws.start, err, "webserver")
 			return err.Error()
 		}
 		portHttps = GetHttps().Server.Addr
@@ -56,18 +59,19 @@ func (ws *WebServer) start() string {
 	//http
 	portHttp := ": не активен"
 	if ws.Http.Enabled {
-		err = ws.Http.Init()
-		if err != nil {
-			return err.Error()
-		}
+		ws.Http.Init()
 		portHttp = ws.Http.Server.Addr
 	}
 
-	return fmt.Sprintf("Web сервер запущен [http%s, https%s] время: %s",
+	message := fmt.Sprintf("Web сервер запущен [http%s, https%s] время: %s",
 		portHttp,
 		portHttps,
 		getTimeNow(),
 	)
+
+	logger.InfoFileName("ws.start", message, "webserver")
+
+	return message
 }
 
 func (ws *WebServer) stop() string {
@@ -75,11 +79,15 @@ func (ws *WebServer) stop() string {
 	ws.Https.Started = false
 	ws.Http.Started = false
 
-	return fmt.Sprintf("Остановка Web сервера [http: %s, https: %s] время: %s",
+	message := fmt.Sprintf("Остановка Web сервера [http: %s, https: %s] время: %s",
 		Protocol(ws.Http).Shutdown(),
 		Protocol(ws.Https).Shutdown(),
 		getTimeNow(),
 	)
+
+	logger.InfoFileName("ws.stop", message, "webserver")
+
+	return message
 }
 
 func (ws *WebServer) restart() string {

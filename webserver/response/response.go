@@ -3,11 +3,10 @@ package response
 import (
 	"encoding/json"
 	"encoding/xml"
-	"github.com/egovorukhin/egomvc/webserver"
-	//"github.com/egovorukhin/egomvc/webserver/controller"
 	"html/template"
 	"net/http"
 	"path"
+	"react-app-egomvc/webserver"
 )
 
 //Формат передавамых данных
@@ -60,6 +59,7 @@ func View(i interface{}, w http.ResponseWriter, pageName string, data interface{
 	if pageName == "" {
 		pageName = webserver.CheckPath("", i) + ".html"
 	}
+
 	tmpl, err := template.ParseFiles(
 		path.Join("views/share", "layout.html"),
 		path.Join("views", pageName))
@@ -71,6 +71,29 @@ func View(i interface{}, w http.ResponseWriter, pageName string, data interface{
 		return err
 	}
 	err = tmpl.ExecuteTemplate(w, "layout", data)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//Отдаём страницы которые находяться в папке www.
+//Т.е. используя функцию Page мы из модели MVC убираем views, а так же static
+//в том виде который используется для MVC. Такой подход был реализован для проектов на React JS.
+//Собираем проект React App с помощью npm или yarn, копируем все содержимое
+//каталога build в каталог www вашего проекта и все будет работать. не забудьте создать
+//контроллер Index, и добавить все возможные пути (react-router-dom) это очень важно.
+func Page(i interface{}, w http.ResponseWriter, pageName string) error {
+	if pageName == "" {
+		pageName = webserver.CheckPath("", i)
+	}
+	pageName += ".html"
+	page, err := template.ParseFiles(path.Join("www", pageName))
+	if err != nil {
+		return err
+	}
+	err = page.Execute(w, nil)
 	if err != nil {
 		return err
 	}

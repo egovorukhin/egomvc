@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"github.com/egovorukhin/egologger/logger"
 	"github.com/gorilla/mux"
 	"net/http"
 	"time"
@@ -12,7 +13,7 @@ func GetHttp() Http {
 	return ws.Http
 }
 
-func (h *Http) Init() error {
+func (h *Http) Init() {
 
 	//Порт
 	addr := ":8098"
@@ -40,12 +41,12 @@ func (h *Http) Init() error {
 
 	h.Started = true
 
-	return nil
 }
 
-func (h Http) ListenAsync()  {
-	if err := h.Server.ListenAndServe(); err != http.ErrServerClosed {
-
+func (h Http) ListenAsync() {
+	err := h.Server.ListenAndServe()
+	if err != http.ErrServerClosed {
+		logger.TraceFileName(h, h.ListenAsync, err, "webserver")
 	}
 }
 

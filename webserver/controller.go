@@ -74,8 +74,11 @@ func (c Controller) SetRouter(router *mux.Router) {
 //Формируем имя контролера, не можем использовать c Controller
 //потому что reflect.TypeOf(v).String() возвращает имя данного пакета (controller),
 //а нужно именно v interface{}
-func (c Controller) SetName(v interface{}) Controller {
-	c.Name = reflect.TypeOf(v).String()
+func (c Controller) SetName(v interface{}, path string) Controller {
+
+	//Добавляем маршрут к имени контроллера для того,
+	//чтобы можно было создать несколько одинаковых котроллеров с разными путями
+	c.Name = reflect.TypeOf(v).String() + path
 	return c
 }
 
