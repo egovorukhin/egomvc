@@ -3,10 +3,10 @@ package response
 import (
 	"encoding/json"
 	"encoding/xml"
+	"github.com/egovorukhin/egomvc/webserver"
 	"html/template"
 	"net/http"
 	"path"
-	"react-app-egomvc/webserver"
 )
 
 //Формат передавамых данных
