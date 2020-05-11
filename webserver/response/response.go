@@ -84,16 +84,21 @@ func View(i interface{}, w http.ResponseWriter, pageName string, data interface{
 //Собираем проект React App с помощью npm или yarn, копируем все содержимое
 //каталога build в каталог www вашего проекта и все будет работать. не забудьте создать
 //контроллер Index, и добавить все возможные пути (react-router-dom) это очень важно.
-func Page(i interface{}, w http.ResponseWriter, pageName string) error {
+func Page(i interface{}, w http.ResponseWriter, pageName string, data interface{}) error {
 	if pageName == "" {
 		pageName = webserver.CheckPath("", i)
 	}
 	pageName += ".html"
-	page, err := template.ParseFiles(path.Join("www", pageName))
+	root := ""
+	if webserver.GetWebServer().Root != nil {
+		root = *webserver.GetWebServer().Root
+	}
+
+	page, err := template.ParseFiles(path.Join(root, pageName))
 	if err != nil {
 		return err
 	}
-	err = page.Execute(w, nil)
+	err = page.Execute(w, data)
 	if err != nil {
 		return err
 	}

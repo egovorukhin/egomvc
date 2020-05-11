@@ -14,9 +14,14 @@ import (
 var ws WebServer
 
 type WebServer struct {
+	Root        *string     `json:"root,omitempty" xml:"root,omitempty"`
 	Http        Http        `json:"http" xml:"http"`
 	Https       Https       `json:"https" xml:"https"`
 	Certificate Certificate `json:"certificate" xml:"certificate"`
+}
+
+func GetWebServer() WebServer {
+	return ws
 }
 
 func (ws *WebServer) load() error {

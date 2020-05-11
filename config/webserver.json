@@ -1,14 +1,15 @@
 {
+  "root": "www",
   "http": {
     "enabled": true,
-    "port": "8087",
+    "port": "8086",
     "timeout": {
       "read": 30,
       "write": 30
     }
   },
   "https": {
-    "enabled": true,
+    "enabled": false,
     "port": "8089",
     "timeout": {
       "read": 30,

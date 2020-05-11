@@ -4,6 +4,7 @@ import (
 	"github.com/egovorukhin/egologger/logger"
 	"github.com/gorilla/mux"
 	"net/http"
+	"path"
 	"path/filepath"
 	"time"
 )
@@ -61,9 +62,13 @@ func (h Https) InitRoutes() *mux.Router {
 
 	//Инициализируем роутер
 	router := mux.NewRouter()
+	root := ""
+	if ws.Root != nil {
+		root = *ws.Root
+	}
 
 	//Присоединяем к путям директорию static
-	static := http.FileServer(http.Dir("./static"))
+	static := http.FileServer(http.Dir(path.Join(".", root, "static")))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", static))
 
 	//Инициализируем Rest API, но обязательно перед этим в пакете controllers
