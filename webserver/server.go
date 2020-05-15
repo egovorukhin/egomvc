@@ -3,7 +3,6 @@ package webserver
 import (
 	"fmt"
 	"github.com/egovorukhin/egoconfigurator/config"
-	"github.com/egovorukhin/egologger/logger"
 	"net/http"
 	"os"
 	"path"
@@ -46,7 +45,7 @@ func (ws *WebServer) start() string {
 	//Загружаем конфигурацию
 	err := ws.load()
 	if err != nil {
-		logger.TraceFileName(ws, ws.start, err, "webserver")
+		//logger.TraceFileName(ws, ws.start, err, "webserver")
 		return err.Error()
 	}
 
@@ -55,7 +54,7 @@ func (ws *WebServer) start() string {
 	if ws.Https.Enabled {
 		err = ws.Https.Init()
 		if err != nil {
-			logger.TraceFileName(ws, ws.start, err, "webserver")
+			//logger.TraceFileName(ws, ws.start, err, "webserver")
 			return err.Error()
 		}
 		portHttps = GetHttps().Server.Addr
@@ -74,7 +73,7 @@ func (ws *WebServer) start() string {
 		getTimeNow(),
 	)
 
-	logger.InfoFileName("ws.start", message, "webserver")
+	//logger.InfoFileName("ws.start", message, "webserver")
 
 	return message
 }
@@ -90,7 +89,7 @@ func (ws *WebServer) stop() string {
 		getTimeNow(),
 	)
 
-	logger.InfoFileName("ws.stop", message, "webserver")
+	//logger.InfoFileName("ws.stop", message, "webserver")
 
 	return message
 }
