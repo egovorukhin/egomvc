@@ -26,7 +26,7 @@ func GetWebServer() WebServer {
 func (ws *WebServer) load() error {
 
 	//Загружаем конфигурацию
-	err := config.Load("webserver", ws)
+	err := config.New().SetExtension(config.YAML).Load("webserver", ws)
 	if err != nil {
 		return err
 	}
