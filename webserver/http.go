@@ -1,7 +1,7 @@
 package webserver
 
 import (
-	"github.com/egovorukhin/egologger/logger"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
@@ -47,7 +47,8 @@ func (h *Http) Init() {
 func (h Http) ListenAsync() {
 	err := h.Server.ListenAndServe()
 	if err != http.ErrServerClosed {
-		logger.TraceFileName(h, h.ListenAsync, err, "webserver")
+		fmt.Println(err)
+		//logger.TraceFileName(h, h.ListenAsync, err, "webserver")
 	}
 }
 
