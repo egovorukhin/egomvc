@@ -13,10 +13,10 @@ import (
 var ws WebServer
 
 type WebServer struct {
-	Root        *string     `json:"root,omitempty" xml:"root,omitempty"`
-	Http        Http        `json:"http" xml:"http"`
-	Https       Https       `json:"https" xml:"https"`
-	Certificate Certificate `json:"certificate" xml:"certificate"`
+	Root        *string     `yaml:"root,omitempty"`
+	Http        Http        `yaml:"http"`
+	Https       Https       `yaml:"https"`
+	Certificate Certificate `yaml:"certificate"`
 }
 
 func GetWebServer() WebServer {

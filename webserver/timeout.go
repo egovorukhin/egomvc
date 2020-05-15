@@ -1,8 +1,8 @@
 package webserver
 
 type Timeout struct {
-	Read  int `json:"read" xml:"read"`
-	Write int `json:"write" xml:"write"`
+	Read  int `yaml:"read"`
+	Write int `yaml:"write"`
 }
 
 func (t Timeout) Get() (int, int) {

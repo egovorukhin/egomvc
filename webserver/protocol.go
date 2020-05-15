@@ -7,9 +7,9 @@ import (
 )
 
 type Protocol struct {
-	Enabled bool    `json:"enabled" xml:"enabled"`
-	Port    string  `json:"port" xml:"port"`
-	Timeout Timeout `json:"timeout" xml:"timeout"`
+	Enabled bool    `yaml:"enabled"`
+	Port    string  `yaml:"port"`
+	Timeout Timeout `yaml:"timeout"`
 	Started bool
 	Server  *http.Server
 }

@@ -6,9 +6,9 @@ import (
 )
 
 type Certificate struct {
-	Path string `json:"path" xml:"path"`
-	Cert string `json:"cert" xml:"cert"`
-	Key  string `json:"key" xml:"key"`
+	Path string `yaml:"path"`
+	Cert string `yaml:"cert"`
+	Key  string `yaml:"key"`
 }
 
 /*
