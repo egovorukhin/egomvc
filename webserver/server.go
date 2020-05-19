@@ -2,7 +2,7 @@ package webserver
 
 import (
 	"fmt"
-	"github.com/egovorukhin/egoconfigurator/config"
+	"github.com/egovorukhin/egoconf"
 	"net/http"
 	"os"
 	"path"
@@ -26,7 +26,7 @@ func GetWebServer() WebServer {
 func (ws *WebServer) load() error {
 
 	//Загружаем конфигурацию
-	err := config.New().SetExtension(config.YAML).Load("webserver", ws)
+	err := egoconf.Load("config/webserver.yml", ws)
 	if err != nil {
 		return err
 	}
