@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"errors"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"net/http"
@@ -171,7 +172,7 @@ func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(usern
 	w.Header().Add("WWW-Authenticate", `Basic realm="EgoMvc"`)
 	w.WriteHeader(http.StatusUnauthorized)
 
-	return nil
+	return errors.New("Необходима авторизация (BasicAuth)")
 }
 
 func (Controller) FormAuth(r *http.Request, f func(username, password string) error) (string, error) {
