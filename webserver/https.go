@@ -35,7 +35,7 @@ func (h *Https) Init() error {
 		Handler:        handle,
 		ReadTimeout:    time.Duration(read) * time.Second,
 		WriteTimeout:   time.Duration(write) * time.Second,
-		MaxHeaderBytes: 1 << 20,
+		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
 	if err := ws.Certificate.Check(); err != nil {

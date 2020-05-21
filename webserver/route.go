@@ -10,10 +10,15 @@ const Empty = "У данного маршрута нет реализации"
 type Method string
 
 const (
-	GET    Method = "GET"
-	POST   Method = "POST"
-	PUT    Method = "PUT"
-	DELETE Method = "DELETE"
+	GET     Method = "GET"
+	POST    Method = "POST"
+	PUT     Method = "PUT"
+	DELETE  Method = "DELETE"
+	HEAD    Method = "HEAD"
+	PATCH   Method = "PATCH"
+	OPTIONS Method = "OPTIONS"
+	TRACE   Method = "TRACE"
+	CONNECT Method = "CONNECT"
 )
 
 func (m Method) String() string {

@@ -2,10 +2,16 @@ package webserver
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
 	"net/http"
 	"reflect"
 	"regexp"
 	"strings"
+)
+
+var secureCookie = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32),
 )
 
 //Структура Controller - типа абстрактный класс,
@@ -39,7 +45,7 @@ func SetController(ic IController, name, description string, routes Routes) Cont
 }
 
 //Инициализируем Controller
-func (Controller) Init(name, description string, routes Routes) Controller {
+func InitController(name, description string, routes Routes) Controller {
 	return Controller{
 		Name:        name,
 		Description: description,
@@ -148,4 +154,34 @@ func (controllers Controllers) SetRouter(router *mux.Router) {
 	for _, controller := range controllers {
 		controller.SetRouter(router)
 	}
+}
+
+//Redirect - перенаправление на другую ссылку
+func (Controller) Redirect(w http.ResponseWriter, r *http.Request, url string, code int) {
+	http.Redirect(w, r, url, code)
+}
+
+//BasicAuth - авторизация способом Basic=
+//auth bool - флаг для отправки заголовка авторизации в браузере
+func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) bool) bool {
+	username, password, ok := r.BasicAuth()
+	if ok {
+		return f(username, password)
+	}
+	w.Header().Add("WWW-Authenticate", `Basic realm="EgoMvc"`)
+	w.WriteHeader(http.StatusUnauthorized)
+
+	return false
+}
+
+func (Controller) FormAuth(r *http.Request, f func(username, password string) error) (string, error) {
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	err := f(username, password)
+	if err != nil {
+		return "", err
+	}
+	return username, nil
 }

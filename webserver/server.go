@@ -17,6 +17,7 @@ type WebServer struct {
 	Http        Http        `yaml:"http"`
 	Https       Https       `yaml:"https"`
 	Certificate Certificate `yaml:"certificate"`
+	Session     Session
 }
 
 func GetWebServer() WebServer {
@@ -102,6 +103,22 @@ func (ws *WebServer) restart() string {
 	return result
 }
 
+func InitTest(minute int) {
+
+	ws = WebServer{}
+
+	//Запускаем WebServer
+	fmt.Println(ws.start())
+
+	//Крутим в цикле и ждём команды
+	exitTime := time.Now().Add(time.Duration(minute) * time.Minute)
+	for {
+		if exitTime == time.Now() {
+			break
+		}
+	}
+}
+
 func Init() error {
 
 	ws = WebServer{}
@@ -140,7 +157,6 @@ func Init() error {
 			break
 		}
 	}
-
 }
 
 func redirect(w http.ResponseWriter, r *http.Request, protocol, port, url string, code int) {
