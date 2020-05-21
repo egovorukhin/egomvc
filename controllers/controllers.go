@@ -1,6 +1,9 @@
 package controllers
 
-import "github.com/egovorukhin/egomvc/webserver"
+import (
+	"github.com/egovorukhin/egomvc/controllers/api"
+	"github.com/egovorukhin/egomvc/webserver"
+)
 
 //Устанавливаем все маршруты из структур
 func Init() {
@@ -11,5 +14,8 @@ func Init() {
 		webserver.NewController(Login{}, "", false),
 		//Выход из системы
 		webserver.NewController(Logout{}, "", false),
+
+		//API
+		webserver.NewController(api.Product{}, "", false),
 	)
 }
