@@ -7,12 +7,17 @@ import (
 )
 
 type Protocol struct {
-	Enabled bool    `yaml:"enabled"`
-	Port    string  `yaml:"port"`
-	Timeout Timeout `yaml:"timeout"`
-	Started bool
-	Server  *http.Server
+	Enabled     bool        `yaml:"enabled"`
+	Port        string      `yaml:"port"`
+	Timeout     Timeout     `yaml:"timeout"`
+	Certificate Certificate `yaml:"certificate"`
+	Started     bool
+	Server      *http.Server
+	Controllers Controllers
 }
+
+//map с интерфейсами Router
+type Controllers map[string]Controller
 
 func (p Protocol) Shutdown() string {
 
@@ -36,4 +41,8 @@ func (p Protocol) String() string {
 		p.Timeout.Write,
 		p.Started,
 	)
+}
+
+func (controllers Controllers) add(controller Controller) {
+	controllers[controller.Name] = controller
 }

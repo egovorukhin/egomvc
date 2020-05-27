@@ -11,11 +11,12 @@ import (
 
 type Https Protocol
 
+/*
 func GetHttps() Https {
 	return ws.Https
 }
-
-func (h *Https) Init() error {
+*/
+func (h *Https) Init(root string) error {
 
 	//Порт
 	addr := ":8099"
@@ -27,7 +28,7 @@ func (h *Https) Init() error {
 	read, write := h.Timeout.Get()
 
 	//Инициализируем маршрутизатор
-	handle := h.InitRoutes()
+	handle := h.InitRoutes(root)
 
 	//Инициализируем сервер
 	h.Server = &http.Server{
@@ -38,7 +39,7 @@ func (h *Https) Init() error {
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
-	if err := ws.Certificate.Check(); err != nil {
+	if err := h.Certificate.Check(); err != nil {
 		return err
 	}
 
@@ -51,22 +52,18 @@ func (h *Https) Init() error {
 }
 
 func (h Https) ListenAsync() {
-	cert := filepath.Join(ws.Certificate.Path, ws.Certificate.Cert)
-	key := filepath.Join(ws.Certificate.Path, ws.Certificate.Key)
+	cert := filepath.Join(h.Certificate.Path, h.Certificate.Cert)
+	key := filepath.Join(h.Certificate.Path, h.Certificate.Key)
 	if err := h.Server.ListenAndServeTLS(cert, key); err != http.ErrServerClosed {
 		fmt.Println(err)
 		//logger.TraceFileName(h, h.ListenAsync, err, "webserver")
 	}
 }
 
-func (h Https) InitRoutes() *mux.Router {
+func (h Https) InitRoutes(root string) *mux.Router {
 
 	//Инициализируем роутер
 	router := mux.NewRouter()
-	root := ""
-	if ws.Root != nil {
-		root = *ws.Root
-	}
 
 	//Присоединяем к путям директорию static
 	static := http.FileServer(http.Dir(path.Join(".", root, "static")))
@@ -74,7 +71,8 @@ func (h Https) InitRoutes() *mux.Router {
 
 	//Инициализируем Rest API, но обязательно перед этим в пакете controllers
 	//добавьте объекты своих структур. Смотрите патерн проектирования EGoMVC
-	GetSecureControllers().SetRouter(router)
+	//GetSecureControllers().SetRouter(router)
+	h.Controllers.SetRouter(router)
 
 	return router
 }

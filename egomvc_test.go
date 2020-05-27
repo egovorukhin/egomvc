@@ -6,9 +6,6 @@ import (
 	"testing"
 )
 
-func TestInit(t *testing.T) {
-
-	controllers.Init()
-
-	webserver.InitTest(5)
+func Test(t *testing.T) {
+	webserver.Init(controllers.Init()).StartTest(5)
 }

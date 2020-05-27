@@ -28,32 +28,39 @@ type Controller struct {
 type Routes []*Route
 
 type IController interface {
-	New(string, bool) Controller
-	Set(string, string, Routes) Controller
+	New(string) Controller
+	Set(string, string, bool, Routes) Controller
 }
 
 //Устанавливаем контролеры которые переопределены в маршрутных структурах
 //New переопределённая функция в тех структурах типа Info...
-func NewController(ic IController, path string, secure bool) Controller {
-	return ic.New(path, secure)
+func NewController(ic IController, path string) Controller {
+	return ic.New(path).setSecure(false)
 }
 
 //Устанавливаем контролеры которые переопределены в маршрутных структурах
 //New переопределённая функция в тех структурах типа Info...
-func SetController(ic IController, name, description string, routes Routes) Controller {
-	return ic.Set(name, description, routes)
+func NewSecureController(ic IController, path string) Controller {
+	return ic.New(path).setSecure(true)
+}
+
+//Устанавливаем контролеры которые переопределены в маршрутных структурах
+//New переопределённая функция в тех структурах типа Info...
+func SetController(ic IController, name, description string, secure bool, routes Routes) Controller {
+	return ic.Set(name, description, secure, routes)
 }
 
 //Инициализируем Controller
-func InitController(name, description string, routes Routes) Controller {
+func InitController(name, description string, secure bool, routes Routes) Controller {
 	return Controller{
 		Name:        name,
+		Secure:      secure,
 		Description: description,
 		Routes:      routes,
 	}
 }
 
-func (c Controller) SetSecure(secure bool) Controller {
+func (c Controller) setSecure(secure bool) Controller {
 	c.Secure = secure
 	return c
 }
@@ -119,12 +126,10 @@ func getPkgPath(v interface{}) string {
 	return strings.Join([]string{pkg, strings.ToLower(t.Name())}, "/")
 }
 
-//map с интерфейсами Router
-type Controllers map[string]Controller
-
 //Статичный map со структурами
-var controllers Controllers
+//var controllers Controllers
 
+/*
 //Возвращаем все контроллеры
 func GetControllers() Controllers {
 	return controllers
@@ -140,14 +145,16 @@ func GetSecureControllers() Controllers {
 	}
 	return newControllers
 }
-
+*/
 //Инициализируем map с Controllers
-func SetControllers(values ...Controller) {
-	controllers = Controllers{}
+/*
+func SetControllers(values ...Controller) []Controller {
+	controllers := Controllers{}
 	for _, value := range values {
 		controllers[value.Name] = value
 	}
-}
+	return controllers
+}*/
 
 //Заполняем маршруты из map с Controllers
 func (controllers Controllers) SetRouter(router *mux.Router) {
@@ -161,30 +168,9 @@ func (Controller) Redirect(w http.ResponseWriter, r *http.Request, url string, c
 	http.Redirect(w, r, url, code)
 }
 
-//BasicAuth - авторизация способом Basic=
-//auth bool - флаг для отправки заголовка авторизации в браузере
-func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) error) bool {
-	username, password, ok := r.BasicAuth()
-	if ok {
-		err := f(username, password)
-		if err == nil {
-			return true
-		}
-	}
-	w.Header().Add("WWW-Authenticate", `Basic realm="EgoMvc"`)
-	w.WriteHeader(http.StatusUnauthorized)
-
-	return false
+/*
+//Redirect на https
+func (c Controller) SecureRedirect(w http.ResponseWriter, r *http.Request, url string, code int) {
+	GetHttps().Redirect(w, r, url, code)
 }
-
-func (Controller) FormAuth(r *http.Request, f func(username, password string) error) (string, error) {
-
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-
-	err := f(username, password)
-	if err != nil {
-		return "", err
-	}
-	return username, nil
-}
+*/

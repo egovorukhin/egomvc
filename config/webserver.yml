@@ -6,12 +6,12 @@ http:
       read: 30
       write: 30
 https:
-  enabled: false
+  enabled: true
   port: "8089"
   timeout:
     read: 30
     write: 30
-certificate:
-  path: "cert"
-  cert: "cert.pem"
-  key: "key.pem"
+  certificate:
+    path: "cert"
+    cert: "cert.pem"
+    key: "key.pem"

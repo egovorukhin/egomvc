@@ -20,7 +20,7 @@ func help() string {
 	return res
 }
 
-func getConfig() string {
+func (ws WebServer) getConfig() string {
 	return fmt.Sprintf("http: {%s}\nhttps: {%s}",
 		Protocol(ws.Http).String(),
 		Protocol(ws.Https).String(),

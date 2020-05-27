@@ -10,19 +10,16 @@ import (
 	"time"
 )
 
-var ws WebServer
+//var ws WebServer
 
 type WebServer struct {
-	Root        *string     `yaml:"root,omitempty"`
-	Http        Http        `yaml:"http"`
-	Https       Https       `yaml:"https"`
-	Certificate Certificate `yaml:"certificate"`
-	Session     Session
+	Root    string `yaml:"root,omitempty"`
+	Http    Http   `yaml:"http"`
+	Https   Https  `yaml:"https"`
+	Session Session
 }
 
-func GetWebServer() WebServer {
-	return ws
-}
+var root string = ""
 
 func (ws *WebServer) load() error {
 
@@ -31,6 +28,8 @@ func (ws *WebServer) load() error {
 	if err != nil {
 		return err
 	}
+
+	root = ws.Root
 
 	return nil
 }
@@ -46,25 +45,23 @@ func (ws *WebServer) start() string {
 	//Загружаем конфигурацию
 	err := ws.load()
 	if err != nil {
-		//logger.TraceFileName(ws, ws.start, err, "webserver")
 		return err.Error()
 	}
 
 	//https
 	portHttps := ": не активен"
 	if ws.Https.Enabled {
-		err = ws.Https.Init()
+		err = ws.Https.Init(ws.Root)
 		if err != nil {
-			//logger.TraceFileName(ws, ws.start, err, "webserver")
 			return err.Error()
 		}
-		portHttps = GetHttps().Server.Addr
+		portHttps = ws.Https.Server.Addr
 	}
 
 	//http
 	portHttp := ": не активен"
 	if ws.Http.Enabled {
-		ws.Http.Init()
+		ws.Http.Init(ws.Root)
 		portHttp = ws.Http.Server.Addr
 	}
 
@@ -103,9 +100,7 @@ func (ws *WebServer) restart() string {
 	return result
 }
 
-func InitTest(minute int) {
-
-	ws = WebServer{}
+func (ws WebServer) StartTest(minute int) {
 
 	//Запускаем WebServer
 	fmt.Println(ws.start())
@@ -119,9 +114,39 @@ func InitTest(minute int) {
 	}
 }
 
-func Init() error {
+func SetControllers(controllers ...Controller) []Controller {
+	return controllers
+}
 
-	ws = WebServer{}
+func (ws WebServer) setControllers(controllers []Controller) WebServer {
+
+	//Http
+	if ws.Http.Controllers == nil {
+		ws.Http.Controllers = Controllers{}
+	}
+
+	//Https
+	if ws.Https.Controllers == nil {
+		ws.Https.Controllers = Controllers{}
+	}
+
+	for _, controller := range controllers {
+		//Если секурный протокол
+		if controller.Secure {
+			Protocol(ws.Https).Controllers.add(controller)
+			continue
+		}
+		//Иначе
+		Protocol(ws.Http).Controllers.add(controller)
+	}
+	return ws
+}
+
+func Init(controllers []Controller) WebServer {
+	return WebServer{}.setControllers(controllers)
+}
+
+func (ws WebServer) Start() error {
 
 	//Запускаем WebServer
 	fmt.Println(ws.start())
@@ -150,7 +175,7 @@ func Init() error {
 			fmt.Println(help())
 			break
 		case CONFIG:
-			fmt.Println(getConfig())
+			fmt.Println(ws.getConfig())
 			break
 		default:
 			fmt.Println("Неизвестная команда! Наберите help для справки.")

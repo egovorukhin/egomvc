@@ -10,11 +10,12 @@ import (
 
 type Http Protocol
 
+/*
 func GetHttp() Http {
 	return ws.Http
-}
+}*/
 
-func (h *Http) Init() {
+func (h *Http) Init(root string) {
 
 	//Порт
 	addr := ":8098"
@@ -26,7 +27,7 @@ func (h *Http) Init() {
 	read, write := h.Timeout.Get()
 
 	//Инициализируем маршрутизатор
-	handle := h.InitRoutes()
+	handle := h.InitRoutes(root)
 
 	//Инициализируем сервер
 	h.Server = &http.Server{
@@ -52,14 +53,10 @@ func (h Http) ListenAsync() {
 	}
 }
 
-func (Http) InitRoutes() *mux.Router {
+func (h Http) InitRoutes(root string) *mux.Router {
 
 	//Инициализируем роутер
 	router := mux.NewRouter()
-	root := ""
-	if ws.Root != nil {
-		root = *ws.Root
-	}
 
 	//Присоединяем к путям директорию static
 	static := http.FileServer(http.Dir(path.Join(".", root, "static")))
@@ -67,7 +64,8 @@ func (Http) InitRoutes() *mux.Router {
 
 	//Добавляем все маршруты, но обязательно перед этим в пакете controllers
 	//добавьте объекты своих структур. Смотрите патерн проектирования EGoMVC
-	GetControllers().SetRouter(router)
+	//GetControllers().SetRouter(router)
+	h.Controllers.SetRouter(router)
 
 	return router
 }

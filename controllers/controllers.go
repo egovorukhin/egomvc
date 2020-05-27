@@ -5,17 +5,17 @@ import (
 	"github.com/egovorukhin/egomvc/webserver"
 )
 
-//Устанавливаем все маршруты из структур
-func Init() {
-	webserver.SetControllers(
-		webserver.NewController(Index{}, "/", false),
+func Init() []webserver.Controller {
+	return webserver.SetControllers(
+
+		webserver.NewSecureController(Index{}, "/"),
 
 		//Вход в систему
-		webserver.NewController(Login{}, "", false),
+		webserver.NewSecureController(Login{}, ""),
 		//Выход из системы
-		webserver.NewController(Logout{}, "", false),
+		webserver.NewSecureController(Logout{}, ""),
 
 		//API
-		webserver.NewController(api.Product{}, "", false),
+		webserver.NewController(api.Product{}, ""),
 	)
 }
