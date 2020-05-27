@@ -10,11 +10,6 @@ import (
 
 type Http Protocol
 
-/*
-func GetHttp() Http {
-	return ws.Http
-}*/
-
 func (h *Http) Init(root string) {
 
 	//Порт
@@ -48,8 +43,7 @@ func (h *Http) Init(root string) {
 func (h Http) ListenAsync() {
 	err := h.Server.ListenAndServe()
 	if err != http.ErrServerClosed {
-		fmt.Println(err)
-		//logger.TraceFileName(h, h.ListenAsync, err, "webserver")
+		fmt.Printf("Http: %s\n", err)
 	}
 }
 

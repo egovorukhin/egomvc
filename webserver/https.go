@@ -11,11 +11,6 @@ import (
 
 type Https Protocol
 
-/*
-func GetHttps() Https {
-	return ws.Https
-}
-*/
 func (h *Https) Init(root string) error {
 
 	//Порт
@@ -55,8 +50,7 @@ func (h Https) ListenAsync() {
 	cert := filepath.Join(h.Certificate.Path, h.Certificate.Cert)
 	key := filepath.Join(h.Certificate.Path, h.Certificate.Key)
 	if err := h.Server.ListenAndServeTLS(cert, key); err != http.ErrServerClosed {
-		fmt.Println(err)
-		//logger.TraceFileName(h, h.ListenAsync, err, "webserver")
+		fmt.Printf("Https: %s\n", err)
 	}
 }
 
