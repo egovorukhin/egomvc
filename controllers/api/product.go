@@ -28,9 +28,7 @@ func (a Product) Set(name, description string, routes webserver.Routes) webserve
 
 func (a Product) Get(w http.ResponseWriter, r *http.Request) {
 
-	err := a.Controller().BasicAuth(w, r, database.Authorization)
-	if err != nil {
-		response.Error(w, err.Error())
+	if !a.Controller().BasicAuth(w, r, database.Authorization) {
 		return
 	}
 

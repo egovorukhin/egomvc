@@ -1,7 +1,6 @@
 package webserver
 
 import (
-	"errors"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"net/http"
@@ -164,15 +163,18 @@ func (Controller) Redirect(w http.ResponseWriter, r *http.Request, url string, c
 
 //BasicAuth - авторизация способом Basic=
 //auth bool - флаг для отправки заголовка авторизации в браузере
-func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) error) error {
+func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) error) bool {
 	username, password, ok := r.BasicAuth()
 	if ok {
-		return f(username, password)
+		err := f(username, password)
+		if err == nil {
+			return true
+		}
 	}
 	w.Header().Add("WWW-Authenticate", `Basic realm="EgoMvc"`)
 	w.WriteHeader(http.StatusUnauthorized)
 
-	return errors.New("Необходима авторизация (BasicAuth)")
+	return false
 }
 
 func (Controller) FormAuth(r *http.Request, f func(username, password string) error) (string, error) {
