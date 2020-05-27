@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Information</title>
+    <style>
+        body {
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: solid #1b1e21 1px;
+        }
+        thead {
+            justify-content: center;
+            background-color: darkgray;
+        }
+        thead th {
+            border: solid #1b1e21 1px;
+        }
+        tbody td {
+            padding: 10px;
+            border: solid #1b1e21 1px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h2>Информация о контроллерах и маршрутах</h2>
+    </div>
+    <div>
+        <table>
+            {{ range .}}
+                <thead >
+                <tr>
+                    <th colspan="3"><a href="info/{{ .Name}}">{{ .Name}}</a></th>
+                </tr>
+                <tr>
+                    {{if .Secure}}
+                        <th colspan="3">Есть шифрованные маршруты. Возможно перенаправление на https маршрут.</th>
+                    {{end}}
+                </tr>
+                <tr>
+                    <th colspan="3">{{ .Description}}</th>
+                </tr>
+                <tr>
+                    <th>Метод</th>
+                    <th>Маршрут</th>
+                    <th>Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .Routes}}
+                    <tr>
+                        <td>{{ .Method }}</td>
+                        <td>{{ .Path }}</td>
+                        <td>{{ .Description}}</td>
+                    </tr>
+                {{end}}
+                </tbody>
+            {{end}}
+        </table>
+    </div>
+</body>
+</html>

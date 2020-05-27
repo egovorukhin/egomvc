@@ -89,7 +89,7 @@ func Page(i interface{}, w http.ResponseWriter, pageName string, data interface{
 	}
 	pageName += ".html"
 
-	page, err := template.ParseFiles(path.Join(root, pageName))
+	page, err := template.ParseFiles(path.Join(getRoot(), pageName))
 	if err != nil {
 		return err
 	}

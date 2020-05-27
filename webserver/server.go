@@ -10,8 +10,6 @@ import (
 	"time"
 )
 
-//var ws WebServer
-
 type WebServer struct {
 	Root    string `yaml:"root,omitempty"`
 	Http    Http   `yaml:"http"`
@@ -19,7 +17,11 @@ type WebServer struct {
 	Session Session
 }
 
-var root string = ""
+var webServer WebServer
+
+func getRoot() string {
+	return webServer.Root
+}
 
 func (ws *WebServer) load() error {
 
@@ -28,8 +30,6 @@ func (ws *WebServer) load() error {
 	if err != nil {
 		return err
 	}
-
-	root = ws.Root
 
 	return nil
 }
@@ -71,8 +71,6 @@ func (ws *WebServer) start() string {
 		getTimeNow(),
 	)
 
-	//logger.InfoFileName("ws.start", message, "webserver")
-
 	return message
 }
 
@@ -98,20 +96,6 @@ func (ws *WebServer) restart() string {
 	result += ws.start()
 
 	return result
-}
-
-func (ws WebServer) StartTest(minute int) {
-
-	//Запускаем WebServer
-	fmt.Println(ws.start())
-
-	//Крутим в цикле и ждём команды
-	exitTime := time.Now().Add(time.Duration(minute) * time.Minute)
-	for {
-		if exitTime == time.Now() {
-			break
-		}
-	}
 }
 
 func SetControllers(controllers ...Controller) []Controller {
@@ -142,14 +126,27 @@ func (ws WebServer) setControllers(controllers []Controller) WebServer {
 	return ws
 }
 
-func Init(controllers []Controller) WebServer {
-	return WebServer{}.setControllers(controllers)
-}
+func InitTest(minute int, controllers []Controller) {
 
-func (ws WebServer) Start() error {
+	webServer = WebServer{}.setControllers(controllers)
 
 	//Запускаем WebServer
-	fmt.Println(ws.start())
+	fmt.Println(webServer.start())
+
+	//Крутим в цикле и ждём команды
+	exitTime := time.Now().Add(time.Duration(minute) * time.Minute)
+	for {
+		if exitTime == time.Now() {
+			break
+		}
+	}
+}
+
+func Init(controllers []Controller) error {
+
+	webServer = WebServer{}.setControllers(controllers)
+	//Запускаем WebServer
+	fmt.Println(webServer.start())
 
 	//Крутим в цикле и ждём команды
 	for {
@@ -160,22 +157,22 @@ func (ws WebServer) Start() error {
 		}
 		switch strings.ToLower(input) {
 		case START:
-			fmt.Println(ws.start())
+			fmt.Println(webServer.start())
 			break
 		case STOP:
-			fmt.Println(ws.stop())
+			fmt.Println(webServer.stop())
 			break
 		case RESTART:
-			fmt.Println(ws.restart())
+			fmt.Println(webServer.restart())
 			break
 		case EXIT:
-			fmt.Println(ws.stop())
+			fmt.Println(webServer.stop())
 			return nil
 		case HELP:
 			fmt.Println(help())
 			break
 		case CONFIG:
-			fmt.Println(ws.getConfig())
+			fmt.Println(webServer.getConfig())
 			break
 		default:
 			fmt.Println("Неизвестная команда! Наберите help для справки.")
@@ -212,4 +209,12 @@ func getTimeNow() string {
 		t.Second(),
 		t.Nanosecond(),
 	)
+}
+
+func GetControllers() Controllers {
+	return webServer.Http.Controllers
+}
+
+func GetSecureControllers() Controllers {
+	return webServer.Https.Controllers
 }

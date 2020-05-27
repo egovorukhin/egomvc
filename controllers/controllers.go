@@ -8,6 +8,9 @@ import (
 func Init() []webserver.Controller {
 	return webserver.SetControllers(
 
+		webserver.NewController(Info{}, ""),
+		webserver.NewSecureController(Info{}, ""),
+
 		webserver.NewSecureController(Index{}, "/"),
 
 		//Вход в систему

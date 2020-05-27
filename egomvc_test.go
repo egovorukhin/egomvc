@@ -7,5 +7,5 @@ import (
 )
 
 func Test(t *testing.T) {
-	webserver.Init(controllers.Init()).StartTest(5)
+	webserver.InitTest(5, controllers.Init())
 }
