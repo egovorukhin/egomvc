@@ -31,16 +31,16 @@ func (a Login) Get(w http.ResponseWriter, r *http.Request) {
 
 func (a Login) Post(w http.ResponseWriter, r *http.Request) {
 
-	username, auth := webserver.FormAuth(r, database.Authorization)
-	if !auth {
-		webserver.Error(w, 401).Json("Не верный имя пользователя или пароль")
+	username, err := webserver.FormAuth(r, database.Authorization)
+	if err != nil {
+		webserver.Error(w, 401).Json(err.Error())
 		return
 	}
 
 	//Session
-	err := webserver.SetSession(w, r, username)
+	err = webserver.SetSession(w, r, username)
 	if err != nil {
-		webserver.Error(w, 401).Json(err)
+		webserver.Error(w, 401).Json(err.Error())
 		return
 	}
 
