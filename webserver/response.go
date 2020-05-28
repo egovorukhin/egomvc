@@ -8,17 +8,64 @@ import (
 	"path"
 )
 
+type Response struct {
+	writer http.ResponseWriter
+}
+
+//Отправляем ответ в формате Json
+func (r Response) Json(i interface{}) error {
+	r.writer.Header().Add("Content-Type", "application/json")
+	err := json.NewEncoder(r.writer).Encode(i)
+	if err != nil {
+		_, err = r.writer.Write([]byte(err.Error()))
+		if err != nil {
+			return err
+		}
+		return err
+	}
+	return nil
+}
+
+//Отправляем ответ в формате Xml
+func (r Response) Xml(i interface{}) error {
+	r.writer.Header().Add("Content-Type", "application/xml")
+	err := xml.NewEncoder(r.writer).Encode(i)
+	if err != nil {
+		_, err = r.writer.Write([]byte(err.Error()))
+		if err != nil {
+			return err
+		}
+		return err
+	}
+	return nil
+}
+
+func OK(w http.ResponseWriter) Response {
+	w.WriteHeader(http.StatusOK)
+	return Response{
+		writer: w,
+	}
+}
+
+func Error(w http.ResponseWriter, code int) Response {
+	w.WriteHeader(code)
+	return Response{
+		writer: w,
+	}
+}
+
+/*
 //Формат передавамых данных
-type FormatBody int
+type ContentType int
 
 const (
-	JSON FormatBody = iota
+	JSON ContentType = iota
 	XML
 )
 
 //Глобальная переменная формата передаваемых данных
-var formatBody FormatBody
-
+//var formatBody FormatBody
+/*
 type Code int
 
 const (
@@ -51,7 +98,7 @@ func InitResponse(w http.ResponseWriter, code Code, message interface{}) Respons
 		},
 	}
 }
-
+*/
 //Возвращаем html страницу
 //Используется для страниц Views, рендеринг страниц
 func View(i interface{}, w http.ResponseWriter, pageName string, data interface{}) error {
@@ -102,7 +149,9 @@ func Page(i interface{}, w http.ResponseWriter, pageName string, data interface{
 
 //Зполняем code = 0 и отправляем в json или xml
 //в соответсвии с formatBody
-func Ok(w http.ResponseWriter, message interface{}) error {
+/*
+func Ok(w http.ResponseWriter, body interface{}) error {
+
 	if message == nil {
 		message = "OK"
 	}
@@ -155,3 +204,4 @@ func (r Response) Xml() error {
 	}
 	return nil
 }
+*/

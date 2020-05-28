@@ -30,5 +30,5 @@ func (a Product) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	webserver.Ok(w, "Здесь куча продуктов")
+	webserver.OK(w).Json("Куча продуктов")
 }
