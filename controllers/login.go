@@ -31,14 +31,14 @@ func (a Login) Get(w http.ResponseWriter, r *http.Request) {
 
 func (a Login) Post(w http.ResponseWriter, r *http.Request) {
 
-	username, err := a.Controller().FormAuth(r, database.Authorization)
-	if err != nil {
-		webserver.Error(w, err.Error())
+	username, auth := webserver.FormAuth(r, database.Authorization)
+	if !auth {
+		webserver.Error(w, "Не верный имя пользователя или пароль")
 		return
 	}
 
 	//Session
-	err = webserver.SetSession(w, r, username)
+	err := webserver.SetSession(w, r, username)
 	if err != nil {
 		webserver.Error(w, err.Error())
 		return

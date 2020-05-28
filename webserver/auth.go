@@ -4,7 +4,7 @@ import "net/http"
 
 //BasicAuth - авторизация способом Basic=
 //auth bool - флаг для отправки заголовка авторизации в браузере
-func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) error) bool {
+func BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password string) error) bool {
 	username, password, ok := r.BasicAuth()
 	if ok {
 		err := f(username, password)
@@ -18,14 +18,14 @@ func (Controller) BasicAuth(w http.ResponseWriter, r *http.Request, f func(usern
 	return false
 }
 
-func (Controller) FormAuth(r *http.Request, f func(username, password string) error) (string, error) {
+func FormAuth(r *http.Request, f func(username, password string) error) (string, bool) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
 	err := f(username, password)
 	if err != nil {
-		return "", err
+		return "", false
 	}
-	return username, nil
+	return username, true
 }
