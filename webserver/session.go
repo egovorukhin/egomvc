@@ -36,11 +36,11 @@ func SetSessionLoadFunc(f func(string) (*Session, error)) {
 }
 
 func SetSession(w http.ResponseWriter, r *http.Request, username string) error {
-	ip, _ := parseIpAddressPort(r.RemoteAddr)
+	//ip, _ := parseIpAddressPort(r.RemoteAddr)
 	session := Session{
 		Id: generateId(),
 		//Извлекаем ip адрес не учитывая порт
-		IpAddress:  ip,
+		IpAddress:  r.RemoteAddr,
 		Username:   username,
 		UserAgent:  r.Header.Get("User-Agent"),
 		Authorized: true,
