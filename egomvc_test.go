@@ -11,8 +11,8 @@ func Test(t *testing.T) {
 	webserver.SetSessionSaveFunc(func(session webserver.Session) error {
 		return nil
 	})
-	webserver.SetSessionLoadFunc(func(session *webserver.Session) error {
-		return nil
+	webserver.SetSessionLoadFunc(func(s string) (*webserver.Session, error) {
+		return nil, nil
 	})
 	webserver.InitTest(5, controllers.Init())
 }
