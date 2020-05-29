@@ -25,11 +25,16 @@ func (a Index) Set(name, description string, secure bool, routes webserver.Route
 
 func (a Index) Get(w http.ResponseWriter, r *http.Request) {
 
-	session, err := webserver.VerifySession(r)
+	session, err := webserver.VerifySessionRedirect(w, r, "/login", http.StatusMovedPermanently)
 	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 		return
 	}
+	/*
+		session, err := webserver.VerifySession(r)
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+			return
+		}*/
 
 	webserver.Page(a, w, "", session.Username)
 }

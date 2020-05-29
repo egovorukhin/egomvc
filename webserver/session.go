@@ -13,6 +13,8 @@ import (
 
 const cookieName = "SID"
 
+var routeUnVerified string
+
 var save func(session Session) error
 var load func(sid string) (*Session, error)
 
@@ -27,6 +29,10 @@ type Session struct {
 
 type Sessions []*Session
 
+func SetRouteUnverified(route string) {
+	routeUnVerified = route
+}
+
 func SetSessionSaveFunc(f func(Session) error) {
 	save = f
 }
@@ -36,11 +42,10 @@ func SetSessionLoadFunc(f func(string) (*Session, error)) {
 }
 
 func SetSession(w http.ResponseWriter, r *http.Request, username string) error {
-	//ip, _ := parseIpAddressPort(r.RemoteAddr)
+	ip, _ := parseIpAddressPort(r.RemoteAddr)
 	session := Session{
-		Id: generateId(),
-		//Извлекаем ip адрес не учитывая порт
-		IpAddress:  r.RemoteAddr,
+		Id:         generateId(),
+		IpAddress:  ip,
 		Username:   username,
 		UserAgent:  r.Header.Get("User-Agent"),
 		Authorized: true,
@@ -125,6 +130,18 @@ func UnAuthorization(w http.ResponseWriter, r *http.Request) error {
 	http.SetCookie(w, &cookie)
 
 	return nil
+}
+
+func VerifySessionRedirect(w http.ResponseWriter, r *http.Request, route string, code int) (*Session, error) {
+	session, err := VerifySession(r)
+	if err != nil {
+		if code == 0 {
+			code = http.StatusMovedPermanently
+		}
+		http.Redirect(w, r, route, code)
+		return nil, err
+	}
+	return session, nil
 }
 
 //Проверка сессии в хранилище (файл, бд и т.д.)
