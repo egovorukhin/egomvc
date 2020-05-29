@@ -14,7 +14,7 @@ import (
 const cookieName = "SID"
 
 var save func(session Session) error
-var load func(session *Session) error
+var load func(sid string) (*Session, error)
 
 type Session struct {
 	Id         string
@@ -27,11 +27,11 @@ type Session struct {
 
 type Sessions []*Session
 
-func SetSessionSaveFunc(f func(session Session) error) {
+func SetSessionSaveFunc(f func(Session) error) {
 	save = f
 }
 
-func SetSessionLoadFunc(f func(session *Session) error) {
+func SetSessionLoadFunc(f func(string) (*Session, error)) {
 	load = f
 }
 
@@ -144,7 +144,7 @@ func VerifySession(r *http.Request) (*Session, error) {
 			return nil, err
 		}
 	} else {
-		err = load(session)
+		session, err = load(cookie.Value)
 		if err != nil {
 			return nil, err
 		}
