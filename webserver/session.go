@@ -27,6 +27,14 @@ type Session struct {
 
 type Sessions []*Session
 
+func SetSessionSaveFunc(f func(session Session) error) {
+	save = f
+}
+
+func SetSessionLoadFunc(f func(session *Session) error) {
+	load = f
+}
+
 func SetSession(w http.ResponseWriter, r *http.Request, username string) error {
 	ip, _ := parseIpAddressPort(r.RemoteAddr)
 	session := Session{
@@ -36,8 +44,7 @@ func SetSession(w http.ResponseWriter, r *http.Request, username string) error {
 		Username:   username,
 		UserAgent:  r.Header.Get("User-Agent"),
 		Authorized: true,
-		//Функция должна реализовать проверку
-		DateTime: time.Now(),
+		DateTime:   time.Now(),
 	}
 
 	if save == nil {

@@ -8,5 +8,11 @@ import (
 
 func Test(t *testing.T) {
 	//webserver.Init(controllers.Init())
+	webserver.SetSessionSaveFunc(func(session webserver.Session) error {
+		return nil
+	})
+	webserver.SetSessionLoadFunc(func(session *webserver.Session) error {
+		return nil
+	})
 	webserver.InitTest(5, controllers.Init())
 }
