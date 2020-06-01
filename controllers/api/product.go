@@ -26,7 +26,9 @@ func (a Product) Set(name, description string, secure bool, routes webserver.Rou
 
 func (a Product) Get(w http.ResponseWriter, r *http.Request) {
 
-	if webserver.BasicAuth(w, r, database.Authorization) != nil {
+	err := webserver.BasicAuth(w, r, database.Authorization)
+	if err != nil {
+		webserver.OK(w).Json(err.Error())
 		return
 	}
 

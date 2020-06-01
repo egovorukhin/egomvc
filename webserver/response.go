@@ -10,11 +10,19 @@ import (
 
 type Response struct {
 	writer http.ResponseWriter
+	code   int
 }
+
+const (
+	Text = "text/plain"
+	Json = "application/json"
+	Xml  = "application/xml"
+)
 
 //Отправляем ответ в формате Json
 func (r Response) Json(i interface{}) error {
-	r.writer.Header().Add("Content-Type", "application/json")
+	r.writer.Header().Add("Content-Type", Json)
+	r.writer.WriteHeader(r.code)
 	err := json.NewEncoder(r.writer).Encode(i)
 	if err != nil {
 		_, err = r.writer.Write([]byte(err.Error()))
@@ -27,8 +35,9 @@ func (r Response) Json(i interface{}) error {
 }
 
 //Отправляем ответ в формате Xml
-func (r *Response) Xml(i interface{}) error {
-	r.writer.Header().Add("Content-Type", "application/xml")
+func (r Response) Xml(i interface{}) error {
+	r.writer.Header().Add("Content-Type", Xml)
+	r.writer.WriteHeader(r.code)
 	err := xml.NewEncoder(r.writer).Encode(i)
 	if err != nil {
 		_, err = r.writer.Write([]byte(err.Error()))
@@ -40,17 +49,29 @@ func (r *Response) Xml(i interface{}) error {
 	return nil
 }
 
+//Отправляем ответ в формате Xml
+func (r Response) Text(s string) error {
+	r.writer.Header().Add("Content-Type", Text)
+	r.writer.WriteHeader(r.code)
+	_, err := r.writer.Write([]byte(s))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func OK(w http.ResponseWriter) Response {
-	w.WriteHeader(http.StatusOK)
 	return Response{
 		writer: w,
+		code:   http.StatusOK,
 	}
 }
 
 func Error(w http.ResponseWriter, code int) Response {
-	w.WriteHeader(code)
 	return Response{
 		writer: w,
+		code:   code,
 	}
 }
 
