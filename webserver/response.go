@@ -27,7 +27,7 @@ func (r Response) Json(i interface{}) error {
 }
 
 //Отправляем ответ в формате Xml
-func (r Response) Xml(i interface{}) error {
+func (r *Response) Xml(i interface{}) error {
 	r.writer.Header().Add("Content-Type", "application/xml")
 	err := xml.NewEncoder(r.writer).Encode(i)
 	if err != nil {

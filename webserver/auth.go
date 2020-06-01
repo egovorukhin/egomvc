@@ -1,6 +1,9 @@
 package webserver
 
-import "net/http"
+import (
+	"errors"
+	"net/http"
+)
 
 //BasicAuth - авторизация способом Basic=
 //auth bool - флаг для отправки заголовка авторизации в браузере
@@ -12,6 +15,8 @@ func BasicAuth(w http.ResponseWriter, r *http.Request, f func(username, password
 		if err == nil {
 			return nil
 		}
+	} else {
+		err = errors.New("Необходимо авторизоваться")
 	}
 	w.Header().Add("WWW-Authenticate", `Basic realm="EgoMvc"`)
 	w.WriteHeader(http.StatusUnauthorized)
