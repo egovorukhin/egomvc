@@ -19,7 +19,7 @@ func (h *Http) Init(root string) {
 	}
 
 	//Таймауты
-	read, write := h.Timeout.Get()
+	read, write, idle := h.Timeout.Get()
 
 	//Инициализируем маршрутизатор
 	handle := h.InitRoutes(root)
@@ -30,6 +30,7 @@ func (h *Http) Init(root string) {
 		Handler:        handle,
 		ReadTimeout:    time.Duration(read) * time.Second,
 		WriteTimeout:   time.Duration(write) * time.Second,
+		IdleTimeout:    time.Duration(idle) * time.Second,
 		MaxHeaderBytes: http.DefaultMaxHeaderBytes,
 	}
 
