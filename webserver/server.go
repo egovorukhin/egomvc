@@ -3,6 +3,7 @@ package webserver
 import (
 	"fmt"
 	"github.com/egovorukhin/egoconf"
+	"log"
 	"net/http"
 	"os"
 	"path"
@@ -45,6 +46,7 @@ func (ws *WebServer) start() string {
 	//Загружаем конфигурацию
 	err := ws.load()
 	if err != nil {
+		log.Fatal(err)
 		return err.Error()
 	}
 
@@ -53,6 +55,7 @@ func (ws *WebServer) start() string {
 	if ws.Https.Enabled {
 		err = ws.Https.Init(ws.Root)
 		if err != nil {
+			log.Fatal(err)
 			return err.Error()
 		}
 		portHttps = ws.Https.Server.Addr

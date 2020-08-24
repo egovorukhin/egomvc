@@ -1,6 +1,6 @@
 module github.com/egovorukhin/egomvc
 
-go 1.14
+go 1.15
 
 require (
 	github.com/egovorukhin/egoconf v0.1.1
