@@ -1,10 +1,6 @@
 package controllers
 
-import (
-	"github.com/egovorukhin/egomvc/webserver"
-	"net/http"
-)
-
+/*
 type Logout webserver.Controller
 
 func (a Logout) New(path string) webserver.Controller {
@@ -32,4 +28,4 @@ func (a Logout) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
-}
+}*/

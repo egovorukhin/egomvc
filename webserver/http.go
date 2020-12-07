@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"fmt"
+	"github.com/egovorukhin/egologger"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
@@ -44,6 +45,7 @@ func (h *Http) Init(root string) {
 func (h Http) ListenAsync() {
 	err := h.Server.ListenAndServe()
 	if err != http.ErrServerClosed {
+		egologger.New(h.ListenAsync, logFilename).Error(err)
 		fmt.Printf("Http: %s\n", err)
 	}
 }

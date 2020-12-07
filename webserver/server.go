@@ -3,7 +3,7 @@ package webserver
 import (
 	"fmt"
 	"github.com/egovorukhin/egoconf"
-	"log"
+	"github.com/egovorukhin/egologger"
 	"net/http"
 	"os"
 	"path"
@@ -18,6 +18,8 @@ type WebServer struct {
 	Session Session
 }
 
+const logFilename = "webserver"
+
 var webServer WebServer
 
 func getRoot() string {
@@ -29,6 +31,7 @@ func (ws *WebServer) load() error {
 	//Загружаем конфигурацию
 	err := egoconf.Load("config/webserver.yml", ws)
 	if err != nil {
+		egologger.New(ws.load, logFilename).Error(err)
 		return err
 	}
 
@@ -46,7 +49,6 @@ func (ws *WebServer) start() string {
 	//Загружаем конфигурацию
 	err := ws.load()
 	if err != nil {
-		log.Fatal(err)
 		return err.Error()
 	}
 
@@ -55,7 +57,6 @@ func (ws *WebServer) start() string {
 	if ws.Https.Enabled {
 		err = ws.Https.Init(ws.Root)
 		if err != nil {
-			log.Fatal(err)
 			return err.Error()
 		}
 		portHttps = ws.Https.Server.Addr
@@ -74,6 +75,8 @@ func (ws *WebServer) start() string {
 		getTimeNow(),
 	)
 
+	egologger.New(ws.start, logFilename).Info(message)
+
 	return message
 }
 
@@ -88,7 +91,7 @@ func (ws *WebServer) stop() string {
 		getTimeNow(),
 	)
 
-	//logger.InfoFileName("ws.stop", message, "webserver")
+	egologger.New(ws.stop, logFilename).Info(message)
 
 	return message
 }
@@ -101,11 +104,11 @@ func (ws *WebServer) restart() string {
 	return result
 }
 
-func SetControllers(controllers ...Controller) []Controller {
+func SetControllers(controllers ...*Controller) []*Controller {
 	return controllers
 }
 
-func (ws WebServer) setControllers(controllers []Controller) WebServer {
+func (ws WebServer) setControllers(controllers []*Controller) WebServer {
 
 	//Http
 	if ws.Http.Controllers == nil {
@@ -129,7 +132,7 @@ func (ws WebServer) setControllers(controllers []Controller) WebServer {
 	return ws
 }
 
-func InitTest(minute int, controllers []Controller) {
+func InitTest(minute int, controllers []*Controller) {
 
 	webServer = WebServer{}.setControllers(controllers)
 
@@ -145,7 +148,7 @@ func InitTest(minute int, controllers []Controller) {
 	}
 }
 
-func Init(controllers []Controller) error {
+func Init(controllers []*Controller) error {
 
 	webServer = WebServer{}.setControllers(controllers)
 	//Запускаем WebServer

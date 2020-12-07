@@ -7,9 +7,10 @@ import (
 
 type Index webserver.Controller
 
-func (a Index) New(path string) webserver.Controller {
+func (a Index) New(path string) *webserver.Controller {
 	path = webserver.CheckPath(path, a)
-	return a.Controller().
+	controller := a.Controller()
+	return controller.
 		SetName(a, path).
 		SetDescription("Контроллер манипулируем данными о пользователе").
 		NewRoute(webserver.SetRoute(path, webserver.GET, "Доступные пользователи", a.Get))

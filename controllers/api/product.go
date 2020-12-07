@@ -1,11 +1,6 @@
 package api
 
-import (
-	"github.com/egovorukhin/egomvc/src/database"
-	"github.com/egovorukhin/egomvc/webserver"
-	"net/http"
-)
-
+/*
 type Product webserver.Controller
 
 func (a Product) New(path string) webserver.Controller {
@@ -33,4 +28,4 @@ func (a Product) Get(w http.ResponseWriter, r *http.Request) {
 	}
 
 	webserver.OK(w).Json("Куча продуктов")
-}
+}*/

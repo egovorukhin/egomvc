@@ -8,7 +8,7 @@ http:
       idle: 30
 https:
   enabled: true
-  port: "8089"
+  port: "8081"
   timeout:
     read: 30
     write: 30

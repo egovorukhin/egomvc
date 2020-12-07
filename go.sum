@@ -1,5 +1,9 @@
 github.com/egovorukhin/egoconf v0.1.1 h1:9Lj/9T9WjaNzbNLMRS1x5jBZb8Tk3YOcuyEJfk87TVM=
 github.com/egovorukhin/egoconf v0.1.1/go.mod h1:Pkb7xKLxedsU9O6hPoEDvYcVjyt5Rnoybe7URKuAqEw=
+github.com/egovorukhin/egologger v1.0.0 h1:j8deS8lPGBoA4I7dV2aAGx74GTySEtrszynsLu58BgA=
+github.com/egovorukhin/egologger v1.0.0/go.mod h1:RZ2+5Mm5jTUdHj5n0/x4peG3bdUWF8Qlpz05rgfjAX0=
+github.com/egovorukhin/egologger v1.0.9 h1:Fai69ZVbR3GHiIQfeuK/IJVsvVn2330j1Xfo1sJGlq0=
+github.com/egovorukhin/egologger v1.0.9/go.mod h1:5b/qeZS0WBUGNwYCNtpNrkl8XepDqb/n7gvEabzBshg=
 github.com/gorilla/mux v1.7.4 h1:VuZ8uybHlWmqV03+zRzdwKL4tUnIp1MAQtp1mIFE1bc=
 github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/securecookie v1.1.1 h1:miw7JPhV+b/lAHSXz4qd/nN9jRiAFV5FwjeKyCS8BvQ=

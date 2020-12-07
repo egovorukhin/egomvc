@@ -17,7 +17,7 @@ type Protocol struct {
 }
 
 //map с интерфейсами Router
-type Controllers map[string]Controller
+type Controllers map[string]*Controller
 
 func (p Protocol) Shutdown() string {
 
@@ -43,6 +43,6 @@ func (p Protocol) String() string {
 	)
 }
 
-func (controllers Controllers) add(controller Controller) {
+func (controllers Controllers) add(controller *Controller) {
 	controllers[controller.Name] = controller
 }

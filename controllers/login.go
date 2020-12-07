@@ -1,11 +1,6 @@
 package controllers
 
-import (
-	"github.com/egovorukhin/egomvc/src/database"
-	"github.com/egovorukhin/egomvc/webserver"
-	"net/http"
-)
-
+/*
 type Login webserver.Controller
 
 func (a Login) New(path string) webserver.Controller {
@@ -45,4 +40,4 @@ func (a Login) Post(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusMovedPermanently)
-}
+}*/

@@ -1,24 +1,24 @@
 package controllers
 
 import (
-	"github.com/egovorukhin/egomvc/controllers/api"
 	"github.com/egovorukhin/egomvc/webserver"
 )
 
-func Init() []webserver.Controller {
+func Init() []*webserver.Controller {
 	return webserver.SetControllers(
 
-		webserver.NewController(Info{}, ""),
-		webserver.NewSecureController(Info{}, ""),
+		//webserver.NewController(Info{}, ""),
+		//webserver.NewSecureController(Info{}, ""),
 
-		webserver.NewSecureController(Index{}, "/"),
+		webserver.NewController(&Index{}, "/"),
+		webserver.NewSecureController(&Index{}, "/"),
 
 		//Вход в систему
-		webserver.NewSecureController(Login{}, ""),
+		//webserver.NewSecureController(Login{}, ""),
 		//Выход из системы
-		webserver.NewSecureController(Logout{}, ""),
+		//webserver.NewSecureController(Logout{}, ""),
 
 		//API
-		webserver.NewController(api.Product{}, ""),
+		//webserver.NewController(api.Product{}, ""),
 	)
 }

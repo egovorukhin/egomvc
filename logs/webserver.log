@@ -1,3 +1,10 @@
 11.05.2020 00:01:53.824071300 Info ws.start - Web сервер запущен [http:8087, https:8089] время: 2020.05.11 00:01:53.769065900
 11.05.2020 23:44:37.103859800 Trace webserver.Http - D:/GoProjects/egomvc/webserver/http.go github.com/egovorukhin/egomvc/webserver.Http.ListenAsync-fm(47): listen tcp :8086: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
 11.05.2020 23:44:37.116860100 Info ws.start - Web сервер запущен [http:8086, https: не активен] время: 2020.05.11 23:44:37.99860200
+2020/09/11 16:50:58.213353 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8089] время: 2020.09.11 16:50:58.200388800
+2020/09/11 16:53:29.321876 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8089] время: 2020.09.11 16:53:29.309908100
+2020/09/11 17:07:47.535016 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8089] время: 2020.09.11 17:07:47.522053000
+2020/09/11 17:41:12.288615 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8089] время: 2020.09.11 17:41:12.275651500
+2020/12/07 11:36:04.389999 D:/GoProjects/egomvc/webserver/https.go:55: Error: github.com/egovorukhin/egomvc/webserver.Https.ListenAsync-fm - listen tcp :8089: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.
+2020/12/07 11:36:04.397977 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8089] время: 2020.12.07 11:36:04.388008000
+2020/12/07 11:37:31.065068 Info: github.com/egovorukhin/egomvc/webserver.(*WebServer).start-fm - Web сервер запущен [http:8086, https:8081] время: 2020.12.07 11:37:31.53099400

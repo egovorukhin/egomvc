@@ -21,6 +21,11 @@ type Controller struct {
 	Description string //Описание структуры
 	Secure      bool   //https протокол
 	Routes      Routes //Маршруты
+	//Log         *Logger
+}
+
+type Options struct {
+	//Logger *Logger
 }
 
 //Массив с маршрутами (Каждый маршрут имеет
@@ -28,20 +33,34 @@ type Controller struct {
 type Routes []*Route
 
 type IController interface {
-	New(string) Controller
+	New(string) *Controller
 	Set(string, string, bool, Routes) Controller
 }
 
 //Устанавливаем контролеры которые переопределены в маршрутных структурах
 //New переопределённая функция в тех структурах типа Info...
-func NewController(ic IController, path string) Controller {
-	return ic.New(path).setSecure(false)
+func NewController(ic IController, path string, options ...Options) *Controller {
+	controller := ic.New(path).setSecure(false)
+	/*controller.Log = &Logger{FileName: "controllers"}
+	for _, option := range options {
+		if option.Logger != nil {
+			controller.setLogger(option.Logger)
+		}
+	}*/
+	return controller
 }
 
 //Устанавливаем контролеры которые переопределены в маршрутных структурах
 //New переопределённая функция в тех структурах типа Info...
-func NewSecureController(ic IController, path string) Controller {
-	return ic.New(path).setSecure(true)
+func NewSecureController(ic IController, path string, options ...Options) *Controller {
+	controller := ic.New(path).setSecure(true)
+	/*controller.Log = &Logger{FileName: "controllers"}
+	for _, option := range options {
+		if option.Logger != nil {
+			controller.setLogger(option.Logger)
+		}
+	}*/
+	return controller
 }
 
 //Устанавливаем контролеры которые переопределены в маршрутных структурах
@@ -60,13 +79,13 @@ func InitController(name, description string, secure bool, routes Routes) Contro
 	}
 }
 
-func (c Controller) setSecure(secure bool) Controller {
+func (c *Controller) setSecure(secure bool) *Controller {
 	c.Secure = secure
 	return c
 }
 
 //Создаём Route маршрут для контролера
-func (c Controller) NewRoute(route *Route) Controller {
+func (c *Controller) NewRoute(route *Route) *Controller {
 	c.Routes = append(c.Routes, route)
 	return c
 }
@@ -87,7 +106,7 @@ func (c Controller) SetRouter(router *mux.Router) {
 //Формируем имя контролера, не можем использовать c Controller
 //потому что reflect.TypeOf(v).String() возвращает имя данного пакета (controller),
 //а нужно именно v interface{}
-func (c Controller) SetName(v interface{}, path string) Controller {
+func (c *Controller) SetName(v interface{}, path string) *Controller {
 
 	//Добавляем маршрут к имени контроллера для того,
 	//чтобы можно было создать несколько одинаковых котроллеров с разными путями
@@ -96,7 +115,7 @@ func (c Controller) SetName(v interface{}, path string) Controller {
 }
 
 //Устанавливаем описание контроллера
-func (c Controller) SetDescription(s string) Controller {
+func (c *Controller) SetDescription(s string) *Controller {
 	c.Description = s
 	return c
 }
@@ -126,36 +145,6 @@ func getPkgPath(v interface{}) string {
 	return strings.Join([]string{pkg, strings.ToLower(t.Name())}, "/")
 }
 
-//Статичный map со структурами
-//var controllers Controllers
-
-/*
-//Возвращаем все контроллеры
-func GetControllers() Controllers {
-	return controllers
-}
-
-//Возвращаем все контроллеры
-func GetSecureControllers() Controllers {
-	newControllers := Controllers{}
-	for _, value := range controllers {
-		if value.Secure {
-			newControllers[value.Name] = value
-		}
-	}
-	return newControllers
-}
-*/
-//Инициализируем map с Controllers
-/*
-func SetControllers(values ...Controller) []Controller {
-	controllers := Controllers{}
-	for _, value := range values {
-		controllers[value.Name] = value
-	}
-	return controllers
-}*/
-
 //Заполняем маршруты из map с Controllers
 func (controllers Controllers) SetRouter(router *mux.Router) {
 	for _, controller := range controllers {
@@ -174,3 +163,9 @@ func (c Controller) SecureRedirect(w http.ResponseWriter, r *http.Request, url s
 	GetHttps().Redirect(w, r, url, code)
 }
 */
+/*
+//setLogger - устанавливаем logger
+func (c Controller) setLogger(logger *Logger) Controller {
+	c.Log = logger
+	return c
+}*/

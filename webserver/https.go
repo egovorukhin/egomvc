@@ -2,6 +2,7 @@ package webserver
 
 import (
 	"fmt"
+	"github.com/egovorukhin/egologger"
 	"github.com/gorilla/mux"
 	"net/http"
 	"path"
@@ -51,6 +52,7 @@ func (h Https) ListenAsync() {
 	cert := filepath.Join(h.Certificate.Path, h.Certificate.Cert)
 	key := filepath.Join(h.Certificate.Path, h.Certificate.Key)
 	if err := h.Server.ListenAndServeTLS(cert, key); err != http.ErrServerClosed {
+		egologger.New(h.ListenAsync, logFilename).Error(err)
 		fmt.Printf("Https: %s\n", err)
 	}
 }

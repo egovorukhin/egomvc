@@ -1,10 +1,6 @@
 package controllers
 
-import (
-	"github.com/egovorukhin/egomvc/webserver"
-	"net/http"
-)
-
+/*
 type Info webserver.Controller
 
 func (a Info) New(path string) webserver.Controller {
@@ -30,4 +26,4 @@ func (a Info) Get(writer http.ResponseWriter, r *http.Request) {
 		return
 	}
 	webserver.Page(a, writer, "", webserver.GetControllers())
-}
+}*/
