@@ -19,7 +19,7 @@ var secureCookie = securecookie.New(
 type Controller struct {
 	Name        string //Имя структуры
 	Description string //Описание структуры
-	Secure      bool   //https протокол
+	secure      bool   //https протокол
 	Routes      Routes //Маршруты
 	//Log         *Logger
 }
@@ -30,7 +30,14 @@ type Options struct {
 
 //Массив с маршрутами (Каждый маршрут имеет
 //разные методы и функции GET, POST...)
-type Routes []*Route
+type Routes []Route
+
+func (r Routes) Append(routes ...Route) Routes {
+	for _, route := range routes {
+		r = append(r, route)
+	}
+	return r
+}
 
 type IController interface {
 	New(string) *Controller
@@ -73,19 +80,19 @@ func SetController(ic IController, name, description string, secure bool, routes
 func InitController(name, description string, secure bool, routes Routes) Controller {
 	return Controller{
 		Name:        name,
-		Secure:      secure,
+		secure:      secure,
 		Description: description,
 		Routes:      routes,
 	}
 }
 
 func (c *Controller) setSecure(secure bool) *Controller {
-	c.Secure = secure
+	c.secure = secure
 	return c
 }
 
 //Создаём Route маршрут для контролера
-func (c *Controller) NewRoute(route *Route) *Controller {
+func (c *Controller) NewRoute(route Route) *Controller {
 	c.Routes = append(c.Routes, route)
 	return c
 }
@@ -101,6 +108,16 @@ func (c Controller) SetRouter(router *mux.Router) {
 	for _, route := range c.Routes {
 		route.SetRouter(router)
 	}
+}
+
+//Формируем имя контролера, не можем использовать c Controller
+//потому что reflect.TypeOf(v).String() возвращает имя данного пакета (controller),
+//а нужно именно v interface{}
+func SetControllerName(v interface{}, path string) string {
+
+	//Добавляем маршрут к имени контроллера для того,
+	//чтобы можно было создать несколько одинаковых котроллеров с разными путями
+	return reflect.TypeOf(v).String() + path
 }
 
 //Формируем имя контролера, не можем использовать c Controller

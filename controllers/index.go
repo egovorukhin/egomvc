@@ -1,23 +1,23 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/egovorukhin/egomvc/webserver"
 	"net/http"
 )
 
 type Index webserver.Controller
 
-func (a Index) New(path string) *webserver.Controller {
+func (a *Index) New(path string) *webserver.Controller {
 	path = webserver.CheckPath(path, a)
-	controller := a.Controller()
-	return controller.
-		SetName(a, path).
-		SetDescription("Контроллер манипулируем данными о пользователе").
-		NewRoute(webserver.SetRoute(path, webserver.GET, "Доступные пользователи", a.Get))
+	a.Name = webserver.SetControllerName(a, path)
+	a.Description = "Контроллер манипулирует данными о пользователе"
+	return a.Controller().NewRoute(webserver.SetRoute(path, webserver.GET, "Доступные пользователи", a.Get))
 }
 
-func (a Index) Controller() webserver.Controller {
-	return webserver.Controller(a)
+func (a Index) Controller() *webserver.Controller {
+	controller := webserver.Controller(a)
+	return &controller
 }
 
 func (a Index) Set(name, description string, secure bool, routes webserver.Routes) webserver.Controller {
@@ -25,6 +25,8 @@ func (a Index) Set(name, description string, secure bool, routes webserver.Route
 }
 
 func (a Index) Get(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println(a)
 
 	session, err := webserver.VerifySessionRedirect(w, r, "/login", http.StatusMovedPermanently)
 	if err != nil {

@@ -41,8 +41,8 @@ func (r Route) SetRouter(router *mux.Router) {
 	router.HandleFunc(r.Path, r.Func).Methods(r.Method.String())
 }
 
-func SetRoute(path string, method Method, description string, Func func(http.ResponseWriter, *http.Request)) *Route {
-	return &Route{
+func SetRoute(path string, method Method, description string, Func func(http.ResponseWriter, *http.Request)) Route {
+	return Route{
 		Path:        path,
 		Method:      method,
 		Description: description,

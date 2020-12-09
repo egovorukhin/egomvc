@@ -122,7 +122,7 @@ func (ws WebServer) setControllers(controllers []*Controller) WebServer {
 
 	for _, controller := range controllers {
 		//Если секурный протокол
-		if controller.Secure {
+		if controller.secure {
 			Protocol(ws.Https).Controllers.add(controller)
 			continue
 		}
